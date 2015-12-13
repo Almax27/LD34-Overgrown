@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" nextobjectid="1">
+ <tileset firstgid="1" name="sprite_earth" tilewidth="16" tileheight="16" tilecount="100">
+  <image source="sprite_earth.png" width="160" height="160"/>
+  <terraintypes>
+   <terrain name="Earth" tile="0"/>
+  </terraintypes>
+  <tile id="0" terrain=",,,0"/>
+  <tile id="1" terrain=",,0,0"/>
+  <tile id="2" terrain=",,0,"/>
+  <tile id="3" terrain="0,0,0,0"/>
+  <tile id="4" terrain="0,0,0,0"/>
+  <tile id="5" terrain="0,0,0,0"/>
+  <tile id="6" terrain="0,0,0,0"/>
+  <tile id="7" terrain="0,0,0,0"/>
+  <tile id="10" terrain=",0,,0"/>
+  <tile id="11" terrain="0,0,0,0"/>
+  <tile id="12" terrain="0,,0,"/>
+  <tile id="13" terrain="0,0,0,0"/>
+  <tile id="14" terrain="0,0,0,0"/>
+  <tile id="15" terrain="0,0,0,0"/>
+  <tile id="16" terrain="0,0,0,0"/>
+  <tile id="17" terrain="0,0,0,0"/>
+  <tile id="20" terrain=",0,,"/>
+  <tile id="21" terrain="0,0,,"/>
+  <tile id="22" terrain="0,,,"/>
+  <tile id="25" terrain="0,0,0,0"/>
+  <tile id="26" terrain="0,0,0,0"/>
+  <tile id="27" terrain="0,0,0,0"/>
+  <tile id="30" terrain="0,0,,0"/>
+  <tile id="31" terrain=",0,0,0"/>
+  <tile id="32" terrain="0,,0,0"/>
+  <tile id="33" terrain="0,0,0,"/>
+ </tileset>
+ <layer name="Vines" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
+  </data>
+ </layer>
+ <layer name="Tile Layer 1" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   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
+  </data>
+ </layer>
+</map>
