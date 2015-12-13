@@ -26,18 +26,18 @@ public class SoldierController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bool isFiring = Input.GetButton("Fire1");
+        bool tryFire = Input.GetButton("Fire1");
+        bool isFiring = tryFire && playerController.isTouchingGround;
 
         if (isFiring)
         {
             lastFireTime = Time.time;
         }
 
-        bool isPausedAfterShooting = Time.time - lastFireTime < pauseAfterShooting;
+        bool isPausedAfterShooting = playerController.isTouchingGround && Time.time - lastFireTime < pauseAfterShooting;
 
         playerController.canLook = !isFiring && !isPausedAfterShooting;
         playerController.canMove = canMoveAndShoot || (!isFiring && !isPausedAfterShooting);
-        playerController.canJump = !isFiring && !isPausedAfterShooting;
 
         //update animator
         animator.SetFloat("attackSpeed", attackSpeed);

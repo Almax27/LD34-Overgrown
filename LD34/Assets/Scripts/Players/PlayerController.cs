@@ -37,7 +37,6 @@ public class PlayerController : MonoBehaviour {
 
 	Vector2 velocity = new Vector2(0,0);
 
-	// Use this for initialization
 	void Start () 
 	{
 		animator = GetComponent<Animator> ();
@@ -45,8 +44,7 @@ public class PlayerController : MonoBehaviour {
 		jumpsRemaining = maxJumps;
 	}
 	
-	// Update is called once per frame
-	void Update () 
+	void FixedUpdate () 
 	{
 		bool groundedThisFrame = calculateIsGrounded();
         bool becameGroundedThisFrame = !isGrounded && groundedThisFrame;
@@ -56,22 +54,22 @@ public class PlayerController : MonoBehaviour {
 		float xInput = Input.GetAxis("Horizontal");
 		bool tryJump = Input.GetButtonDown("Jump");
 
+        if (isGrounded)
+        {
+            velocity.y = 0;
+        }
         if (!isTouchingGround)
-		{
-            velocity.y -= gravity * Time.smoothDeltaTime;
-		}
-		else
-		{
-			velocity.y = 0;
-		}
-
+        {
+            velocity.y -= gravity * Time.fixedDeltaTime;
+        }
+            
 		//handle jumps
-		if (becameGroundedThisFrame)
+        if (isTouchingGround)
 		{
 			jumpsRemaining = maxJumps;
 			hasJumped = false;
-			velocity.y = 0;
 			hasMovedInAir = false;
+            velocity.y = 0;
 		}
         if (canJump && tryJump && jumpsRemaining > 0)
 		{
@@ -86,7 +84,7 @@ public class PlayerController : MonoBehaviour {
 			float deltaY = (jumpCurve.Evaluate(jumpTick) - jumpCurve.Evaluate(lastJumpTick)) * jumpHeight;
 			if(deltaY != 0)
 			{
-				velocity.y = deltaY / Time.deltaTime;
+                velocity.y = deltaY / Time.fixedDeltaTime;
 			}
 		}
 
@@ -121,7 +119,7 @@ public class PlayerController : MonoBehaviour {
         }
 
 		//move rigidbody
-        Vector3 newPosition = transform.position + new Vector3(velocity.x, velocity.y, 0) * Time.smoothDeltaTime;
+        Vector3 newPosition = transform.position + new Vector3(velocity.x, velocity.y, 0) * Time.fixedDeltaTime;
 		ridgidBody2D.MovePosition(newPosition);
 
 		//handle direction facing
@@ -138,7 +136,7 @@ public class PlayerController : MonoBehaviour {
 		//update animator
 		animator.SetFloat("moveSpeed", xInput);
 		animator.SetBool("isRunning", xInput != 0);
-		animator.SetBool("isGrounded", isGrounded);
+        animator.SetBool("isGrounded", isGrounded);
 	}
 
 	bool calculateIsGrounded()

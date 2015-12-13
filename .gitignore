@@ -1,3 +1,6 @@
+# ================
+# Unity crap
+# ================
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
@@ -19,3 +22,23 @@
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
+
+# ================
+# Windows crap
+# ================
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# ================
+# Mac crap
+# ================
+
+.DS_Store
