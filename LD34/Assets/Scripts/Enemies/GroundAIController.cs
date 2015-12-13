@@ -4,6 +4,7 @@ using System.Collections;
 public class GroundAIController : MonoBehaviour
 {
     public SpriteRenderer body;
+    public SpriteRenderer deadPrefab;
 
     public LayerMask targetMask = new LayerMask();
     public LayerMask sightMask = new LayerMask();
@@ -105,11 +106,20 @@ public class GroundAIController : MonoBehaviour
     void OnDeath()
     {
         this.enabled = false;
-        animator.SetTrigger("onDeath");
         animator.SetBool("isDead", true);
         gameObject.layer = 0;
         rigidbody2d.isKinematic = true;
-        animator.enabled = false;
+    }
+
+    void onDeathAnimFinished()
+    {
+        Destroy(gameObject);
+        if (deadPrefab)
+        {
+            var deadSprite = Instantiate(deadPrefab.gameObject).GetComponent<SpriteRenderer>();
+            deadSprite.flipX = body.flipX;
+            deadSprite.transform.position = this.transform.position;
+        }
     }
 }
 
