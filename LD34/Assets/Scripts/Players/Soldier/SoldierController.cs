@@ -27,14 +27,14 @@ public class SoldierController : MonoBehaviour
     void Update()
     {
         bool tryFire = Input.GetButton("Fire1");
-        bool isFiring = tryFire && playerController.isTouchingGround;
+        bool isFiring = tryFire && playerController.grounder.isGrounded;
 
         if (isFiring)
         {
             lastFireTime = Time.time;
         }
 
-        bool isPausedAfterShooting = playerController.isTouchingGround && Time.time - lastFireTime < pauseAfterShooting;
+        bool isPausedAfterShooting = playerController.grounder.isGrounded && Time.time - lastFireTime < pauseAfterShooting;
 
         playerController.canLook = !isFiring && !isPausedAfterShooting;
         playerController.canMove = canMoveAndShoot || (!isFiring && !isPausedAfterShooting);

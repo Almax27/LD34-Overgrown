@@ -5,15 +5,12 @@ public class PlayerController : MonoBehaviour {
 
 	public SpriteRenderer body;
 	public SpriteRenderer legs;
-    public Collider2D groundedCollider;
+    public Grounder grounder;
 
     [Header("Platforming")]
 	public float gravity = 1;
 	public AnimationCurve jumpCurve = new AnimationCurve();
 	public float jumpHeight = 1;
-	public LayerMask isGroundedMask = new LayerMask();
-	public bool isGrounded = true;
-    public bool isTouchingGround = true; //may flicker
 	public float groundSpeed = 0.3f;
 	public float airSpeed = 0.1f;
     public bool canMove = true;
@@ -23,15 +20,12 @@ public class PlayerController : MonoBehaviour {
     public bool isLookingRight = true;
 
 	Animator animator;
-	Rigidbody2D ridgidBody2D;
+	new Rigidbody2D rigidbody2D;
 
 	int jumpsRemaining = 0;
 	int maxJumps = 1;
 	bool hasJumped = false;
 	float jumpTick = 0;
-
-    float groundedTick = 0;
-    bool pendingGroundedState = false;
 
 	bool hasMovedInAir = false;
 
@@ -40,55 +34,53 @@ public class PlayerController : MonoBehaviour {
 	void Start () 
 	{
 		animator = GetComponent<Animator> ();
-		ridgidBody2D = GetComponent<Rigidbody2D>();
+		rigidbody2D = GetComponent<Rigidbody2D>();
 		jumpsRemaining = maxJumps;
 	}
-	
-	void FixedUpdate () 
-	{
-		bool groundedThisFrame = calculateIsGrounded();
-        bool becameGroundedThisFrame = !isGrounded && groundedThisFrame;
-        isGrounded = groundedThisFrame;
 
-		//get input
-		float xInput = Input.GetAxis("Horizontal");
-		bool tryJump = Input.GetButtonDown("Jump");
+    void Update()
+    {
+        var isGrounded = grounder.isGrounded && velocity.y <= 0;
 
+        //get input
+        float xInput = Input.GetAxis("Horizontal");
+        bool tryJump = Input.GetButtonDown("Jump");
+
+        //apply gravity
         if (isGrounded)
         {
             velocity.y = 0;
         }
-        if (!isTouchingGround)
-        {
-            velocity.y -= gravity * Time.fixedDeltaTime;
-        }
-            
-		//handle jumps
-        if (isTouchingGround)
-		{
-			jumpsRemaining = maxJumps;
-			hasJumped = false;
-			hasMovedInAir = false;
-            velocity.y = 0;
-		}
-        if (canJump && tryJump && jumpsRemaining > 0)
-		{
-			jumpTick = 0;
-			hasJumped = true;
-			jumpsRemaining--;
-		}
-		if (hasJumped)
-		{
-			float lastJumpTick = jumpTick;
-			jumpTick += Time.deltaTime;
-			float deltaY = (jumpCurve.Evaluate(jumpTick) - jumpCurve.Evaluate(lastJumpTick)) * jumpHeight;
-			if(deltaY != 0)
-			{
-                velocity.y = deltaY / Time.fixedDeltaTime;
-			}
-		}
+        velocity.y -= gravity * Time.smoothDeltaTime;
 
-		//handle movement
+        //handle jumps
+        if (isGrounded)
+        {
+            jumpsRemaining = maxJumps;
+            hasJumped = false;
+        }
+        if (canJump && tryJump && jumpsRemaining > 0)
+        {
+            jumpTick = 0;
+            hasJumped = true;
+            jumpsRemaining--;
+        }
+        if (hasJumped)
+        {
+            float lastJumpTick = jumpTick;
+            jumpTick += Time.smoothDeltaTime;
+            float deltaY = (jumpCurve.Evaluate(jumpTick) - jumpCurve.Evaluate(lastJumpTick)) * jumpHeight;
+            if(deltaY != 0)
+            {
+                velocity.y = deltaY / Time.smoothDeltaTime;
+            }
+        }
+
+        //handle movement
+        if (isGrounded)
+        {
+            hasMovedInAir = false;
+        }
         if (canMove)
         {
             float desiredSpeed = groundSpeed;
@@ -105,7 +97,7 @@ public class PlayerController : MonoBehaviour {
             xInput = 0;
             velocity.x = 0;
         }
-            
+
         //update facing
         if (xInput != 0)
         {
@@ -118,49 +110,23 @@ public class PlayerController : MonoBehaviour {
             legs.flipX = !isMovingRight;
         }
 
-		//move rigidbody
-        Vector3 newPosition = transform.position + new Vector3(velocity.x, velocity.y, 0) * Time.fixedDeltaTime;
-		ridgidBody2D.MovePosition(newPosition);
-
-		//handle direction facing
+        //handle direction facing
         if (xInput != 0)
-		{
-			bool isMovingRight = xInput > 0;
+        {
+            bool isMovingRight = xInput > 0;
             if (canLook)
-			{
-				isLookingRight = isMovingRight;
-			}
-			
-		}
-
-		//update animator
-		animator.SetFloat("moveSpeed", xInput);
-		animator.SetBool("isRunning", xInput != 0);
-        animator.SetBool("isGrounded", isGrounded);
-	}
-
-	bool calculateIsGrounded()
-	{
-		var collider = GetComponent<Collider2D>();
-        isTouchingGround = groundedCollider.IsTouchingLayers(isGroundedMask);
-
-        //if we're waiting on verification then states will be the same
-        if (pendingGroundedState == isTouchingGround)
-        {
-            if (groundedTick > 0.05f)
             {
-                return isTouchingGround;
+                isLookingRight = isMovingRight;
             }
-            groundedTick += Time.deltaTime;
-        }
-        //if states are different then restart verification
-        else
-        {
-            groundedTick = 0;
-            pendingGroundedState = isTouchingGround;
         }
 
-        //return what we already know
-        return isGrounded;
-	}
+        //update animator
+        animator.SetFloat("moveSpeed", xInput);
+        animator.SetBool("isRunning", xInput != 0);
+        animator.SetBool("isGrounded", isGrounded);
+
+        //move rigidbody
+        Vector3 newPosition = transform.position + new Vector3(velocity.x, velocity.y, 0) * Time.smoothDeltaTime;
+        rigidbody2D.MovePosition(newPosition);
+    }
 }
