@@ -36,7 +36,7 @@ public class SoldierController : MonoBehaviour
         bool isPausedAfterShooting = Time.time - lastFireTime < pauseAfterShooting;
 
         playerController.canLook = !isFiring && !isPausedAfterShooting;
-        playerController.canMove = !isFiring && !isPausedAfterShooting;
+        playerController.canMove = canMoveAndShoot || (!isFiring && !isPausedAfterShooting);
         playerController.canJump = !isFiring && !isPausedAfterShooting;
 
         //update animator

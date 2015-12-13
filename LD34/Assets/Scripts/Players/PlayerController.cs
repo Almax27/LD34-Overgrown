@@ -111,9 +111,13 @@ public class PlayerController : MonoBehaviour {
         //update facing
         if (xInput != 0)
         {
-            bool facingRight = xInput > 0;
-            body.flipX = canLook && !facingRight;
-            legs.flipX = !facingRight;
+            isMovingRight = xInput > 0;
+            if (canLook)
+            {
+                isLookingRight = isMovingRight;
+            }
+            body.flipX = !isLookingRight;
+            legs.flipX = !isMovingRight;
         }
 
 		//move rigidbody
