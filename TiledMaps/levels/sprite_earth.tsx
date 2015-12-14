@@ -148,7 +148,7 @@
    <object id="0" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
- <tile id="199" terrain="1,1,,1">
+ <tile id="199">
   <objectgroup draworder="index">
    <object id="0" x="0" y="0" width="16" height="16"/>
   </objectgroup>
