@@ -4,6 +4,7 @@
  <terraintypes>
   <terrain name="Earth" tile="0"/>
   <terrain name="Ice" tile="322"/>
+  <terrain name="Cave" tile="18"/>
  </terraintypes>
  <tile id="0" terrain=",,,0">
   <objectgroup draworder="index">
@@ -45,6 +46,10 @@
    <object id="0" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
+ <tile id="18" terrain=",,,2"/>
+ <tile id="19" terrain=",,2,2"/>
+ <tile id="20" terrain=",,2,"/>
+ <tile id="21" terrain="2,2,2,2"/>
  <tile id="64" terrain=",0,,0">
   <objectgroup draworder="index">
    <object id="0" x="0" y="0" width="16" height="16"/>
@@ -85,6 +90,10 @@
    <object id="0" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
+ <tile id="82" terrain=",2,,2"/>
+ <tile id="83" terrain="2,2,2,2"/>
+ <tile id="84" terrain="2,,2,"/>
+ <tile id="85" terrain="2,2,2,2"/>
  <tile id="128" terrain=",0,,">
   <objectgroup draworder="index">
    <object id="0" x="0" y="0" width="16" height="16"/>
@@ -115,6 +124,10 @@
    <object id="0" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
+ <tile id="146" terrain=",2,,"/>
+ <tile id="147" terrain="2,2,,"/>
+ <tile id="148" terrain="2,,,"/>
+ <tile id="149" terrain="2,2,2,2"/>
  <tile id="192" terrain="0,0,,0">
   <objectgroup draworder="index">
    <object id="0" x="0" y="0" width="16" height="16"/>
@@ -140,6 +153,8 @@
    <object id="0" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
+ <tile id="210" terrain="2,2,,2"/>
+ <tile id="211" terrain="2,2,2,"/>
  <tile id="262" terrain="1,1,,">
   <objectgroup draworder="index">
    <object id="0" x="0" y="0" width="16" height="16"/>
@@ -150,6 +165,8 @@
    <object id="0" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
+ <tile id="274" terrain=",2,2,2"/>
+ <tile id="275" terrain="2,,2,2"/>
  <tile id="322" terrain=",,,1">
   <objectgroup draworder="index">
    <object id="0" x="0" y="0" width="16" height="16"/>
