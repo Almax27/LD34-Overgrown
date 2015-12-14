@@ -6,6 +6,7 @@ public class BackgroundHelper : MonoBehaviour {
     public Camera relativeCamera = null;
     public Vector2 parallaxScale = Vector2.one;
     public Vector2 relativePosition = new Vector2(0.5f,0.5f);
+    public Vector2 tileSpacing = Vector2.zero;
 
     public SpriteRenderer spritePrefab = null;
     public int tileUp = 0;
@@ -28,7 +29,7 @@ public class BackgroundHelper : MonoBehaviour {
                 if (i != 0 || j != 0)
                 {
                     var sprite = CreateSprite();
-                    Vector3 pos = new Vector3(i * sprite.bounds.size.x, j * sprite.bounds.size.y, 0);
+                    Vector3 pos = new Vector3(i * (sprite.bounds.size.x + tileSpacing.x), j * (sprite.bounds.size.y + tileSpacing.y), 0);
                     pos.x += randomOffset.x * Random.value;
                     pos.y += randomOffset.y * Random.value;
                     sprite.transform.position = pos;
