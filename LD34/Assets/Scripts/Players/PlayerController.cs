@@ -6,18 +6,26 @@ public class PlayerController : MonoBehaviour {
 	public SpriteRenderer body;
 	public SpriteRenderer legs;
     public Grounder grounder;
+    public Climber climber;
 
-    [Header("Platforming")]
+    [Header("Config")]
 	public float gravity = 1;
 	public AnimationCurve jumpCurve = new AnimationCurve();
 	public float jumpHeight = 1;
 	public float groundSpeed = 0.3f;
 	public float airSpeed = 0.1f;
+    public float climbingSpeed = 0.2f;
+    public LayerMask climbingLayer = new LayerMask();
+    public bool allowMoveToCancelClimb = false;
+    public float climbExitTime = 0.2f; //time after leaving climbable before can climb again
+
+    [Header("State")]
     public bool canMove = true;
     public bool canLook = true;
     public bool canJump = true;
     public bool isMovingRight = true;
     public bool isLookingRight = true;
+    public bool isClimbing = false;
 
 	Animator animator;
 	new Rigidbody2D rigidbody2D;
@@ -33,6 +41,10 @@ public class PlayerController : MonoBehaviour {
     float xInputRaw = 0;
     float xInput = 0;
     float xInputVel = 0;
+    float yInput = 0;
+
+    float lastClimbTime = 0;
+
     Vector2 velocity = Vector2.zero;
 
 	void Start () 
@@ -46,6 +58,7 @@ public class PlayerController : MonoBehaviour {
     {
         //get input
         xInputRaw = Input.GetAxisRaw("Horizontal");
+        yInput = Input.GetAxis("Vertical");
         tryJump = tryJump || Input.GetButtonDown("Jump");
     }
 
@@ -58,10 +71,79 @@ public class PlayerController : MonoBehaviour {
         {
             velocity.y = 0;
         }
-        velocity.y -= gravity * Time.fixedDeltaTime;
+        if (!isClimbing)
+        {
+            velocity.y -= gravity * Time.fixedDeltaTime;
+        }
 
-        //handle jumps
-        if (isGrounded)
+        HandleClimbing(isGrounded);
+        HandleJumping(isGrounded);
+        HandleMovement(isGrounded);
+
+        UpdateFacing();
+
+        //update animator
+        animator.SetFloat("moveSpeed", Mathf.Abs(xInput));
+        animator.SetBool("isRunning", canMove && xInputRaw != 0);
+        animator.SetBool("isGrounded", isGrounded);
+
+        //move rigidbody
+        rigidbody2D.isKinematic = isClimbing;
+        Vector3 newPosition = transform.position + new Vector3(velocity.x, velocity.y, 0) * Time.fixedDeltaTime;
+        rigidbody2D.MovePosition(newPosition);
+    }
+        
+    void HandleClimbing(bool isGrounded)
+    {
+        //handle climbing
+        bool wasClimbing = isClimbing;
+        isClimbing |= yInput != 0 && (Time.time - lastClimbTime > climbExitTime);
+        isClimbing &= climber.canClimb;
+
+        //handle move exit case
+        if (allowMoveToCancelClimb && xInputRaw != 0)
+        {
+            isClimbing = false;
+        }
+        //handle jump exit case
+        else if (xInputRaw != 0 && tryJump)
+        {
+            isClimbing = false;
+        }
+        //handle botom of ladder case
+        else if (isGrounded && yInput < 0 && !climber.atTopOfLadder)
+        {
+            isClimbing = false;
+        }
+        //handle top of ladder case
+        else if (isGrounded && yInput > 0 && climber.atTopOfLadder)
+        {
+            isClimbing = false;
+        }
+
+        if (isClimbing)
+        {
+            //move climbing
+            velocity.y = yInput * climbingSpeed;
+
+            //snap to ladder
+            var pos = transform.position;
+            pos.x = climber.lockX;
+            transform.position = pos;
+
+            canMove = false;
+            tryJump = false;
+            lastClimbTime = Time.time;
+        }
+        if (wasClimbing != isClimbing)
+        {
+            velocity.y = 0;
+        }
+    }
+
+    void HandleJumping(bool isGrounded)
+    {
+        if (isGrounded || isClimbing)
         {
             jumpsRemaining = maxJumps;
             hasJumped = false;
@@ -83,7 +165,10 @@ public class PlayerController : MonoBehaviour {
             }
         }
         tryJump = false;
+    }
 
+    void HandleMovement(bool isGrounded)
+    {
         //handle movement
         if (isGrounded)
         {
@@ -106,8 +191,11 @@ public class PlayerController : MonoBehaviour {
             xInput = 0;
             velocity.x = 0;
         }
+    }
 
-        //update facing
+    void UpdateFacing()
+    {
+        //update sprites
         if (xInput != 0)
         {
             isMovingRight = xInput > 0;
@@ -119,7 +207,7 @@ public class PlayerController : MonoBehaviour {
             legs.flipX = !isMovingRight;
         }
 
-        //handle direction facing
+        //update direction facing
         if (xInput != 0)
         {
             bool isMovingRight = xInput > 0;
@@ -128,14 +216,5 @@ public class PlayerController : MonoBehaviour {
                 isLookingRight = isMovingRight;
             }
         }
-
-        //update animator
-        animator.SetFloat("moveSpeed", Mathf.Abs(xInput));
-        animator.SetBool("isRunning", canMove && xInputRaw != 0);
-        animator.SetBool("isGrounded", isGrounded);
-
-        //move rigidbody
-        Vector3 newPosition = transform.position + new Vector3(velocity.x, velocity.y, 0) * Time.fixedDeltaTime;
-        rigidbody2D.MovePosition(newPosition);
     }
 }

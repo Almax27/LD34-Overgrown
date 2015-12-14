@@ -1,6 +1,224 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" nextobjectid="54">
- <tileset firstgid="1" source="sprite_earth.tsx"/>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" nextobjectid="59">
+ <tileset firstgid="1" name="sprite_earth" tilewidth="16" tileheight="16" tilecount="4096">
+  <image source="sprite_earth.png" width="1024" height="1024"/>
+  <terraintypes>
+   <terrain name="Earth" tile="0"/>
+   <terrain name="Ice" tile="322"/>
+   <terrain name="Cave" tile="18"/>
+  </terraintypes>
+  <tile id="0" terrain=",,,0">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="1" terrain=",,0,0">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="2" terrain=",,0,">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="3" terrain="0,0,0,0">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="4" terrain="0,0,0,0">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="5" terrain="0,0,0,0">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="6" terrain="0,0,0,0">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="7" terrain="0,0,0,0">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="18" terrain=",,,2"/>
+  <tile id="19" terrain=",,2,2"/>
+  <tile id="20" terrain=",,2,"/>
+  <tile id="21" terrain="2,2,2,2"/>
+  <tile id="64" terrain=",0,,0">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="65" terrain="0,0,0,0">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="66" terrain="0,,0,">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="67" terrain="0,0,0,0">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="68" terrain="0,0,0,0">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="69" terrain="1,1,1,1">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="70" terrain="1,1,1,1">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="71" terrain="0,0,0,0">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="82" terrain=",2,,2"/>
+  <tile id="83" terrain="2,2,2,2"/>
+  <tile id="84" terrain="2,,2,"/>
+  <tile id="85" terrain="2,2,2,2"/>
+  <tile id="128" terrain=",0,,">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="129" terrain="0,0,,">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="130" terrain="0,,,">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="133" terrain="1,1,1,1">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="134" terrain="1,1,1,1">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="135">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="146" terrain=",2,,"/>
+  <tile id="147" terrain="2,2,,"/>
+  <tile id="148" terrain="2,,,"/>
+  <tile id="149" terrain="2,2,2,2"/>
+  <tile id="192" terrain="0,0,,0">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="193" terrain=",0,0,0">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="194" terrain="0,,0,0">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="195" terrain="0,0,0,">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="199" terrain="1,1,,1">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="210" terrain="2,2,,2"/>
+  <tile id="211" terrain="2,2,2,"/>
+  <tile id="262" terrain="1,1,,">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="263" terrain="1,1,1,">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="274" terrain=",2,2,2"/>
+  <tile id="275" terrain="2,,2,2"/>
+  <tile id="322" terrain=",,,1">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="323" terrain=",,1,">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="324" terrain="1,,1,1">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="325" terrain=",1,1,1">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="386" terrain=",1,,1">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="387" terrain="1,,1,">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="388" terrain=",,1,1">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="392">
+   <objectgroup draworder="index">
+    <object id="0" x="0.0434783" y="-0.130435" width="16" height="3.08696"/>
+   </objectgroup>
+  </tile>
+  <tile id="450" terrain=",1,,">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+  <tile id="451" terrain="1,,,">
+   <objectgroup draworder="index">
+    <object id="0" x="0" y="0" width="16" height="16"/>
+   </objectgroup>
+  </tile>
+ </tileset>
  <layer name="background" width="100" height="100">
   <data encoding="base64" compression="zlib">
    eJzt0bENg0AQRcFzaDrDdTmBznBVZoMVBEjY0SJuRvq6dHWvNQAAAAAAAAAAAAAAAAAqPQ82lF7Ut2XdtG7c7VV6Ud+ixb5JvHPpRX2LFmPbmsT7Kb3o3t4nyx65aDI8Sk69tfzvX2UPLa4hewAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/OsLoRcSbA==
@@ -11,61 +229,17 @@
    eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
   </data>
  </layer>
- <objectgroup name="backgroundObjects"/>
  <layer name="game" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt2FtuwjAQBVD7q+yLAgujhYWlHyyrRIrVyUAopFCEdI5kJSURUn3xY1wKAAAAAAAAAAAAAADwm2Ut5fMP7b0++z94Xef6ft2347PNse2ObR+u6+F+c+HzD3nMtq2nfbwZ2jpc4zsxq/Z5e7Y4ft+XPGZZDmOhZbAr436OubzV65os5otjo13b3JMbj9fn0TKQw3Mt07od8zDn/L9tPV2vZfE8XZXBq7mmLlT7PV7LYV1/9l5x/xtrRLXf48Qc4j645bAv4zWn/3tl3DxErA1bfZj7f5fu41451vb985VMZsljYiqPeCYS72MNH+vJ/mouu81yIod4dtLWiTge4hnWJr23L9aWuXJ9HnOI/RzPtFp2cTzkM8f2mTnrNts6nl9y305lMbV2xFq/5SmT63XDmeyhjPewuX/zHjeuIbnGj/NVe27euk03ZJLPTvLZ1rkc9undhTP4u9jW8doQ56s4T8V1ImdnDb+fLvye21jJ9UZ/zb//QxnnKI/7687MOVNzT37X3AQAAAAAAAAAAAAAAAAAAAAAAACXfQPYcZT1
+   eJzt2F1Og0AUBlB40n1V27iuahvXRR90V0LCxMsVKlMxJuacZAIWNGa+zp2fpgEAAAAAAAAAAAAA4L96av/6P/g/dn1fvvygPfTtVR43mev7/dD6Z4e+nfp2Dtf9eH+48vlz//vv8rjJsf3ax4ex7cM1vhOzKp+XZ/f937vI4ya7cSyUDE7NtJ9jLnftunYZc5BHvTg2yrXUntxqyaPekEfJYKscCnnU2aV5O+Zx2aAv5VHn2H6dr7fKYiCPOl27fQaRPLa3Zl/4sNDv8thOyWHffq694vo37hGf5fFrYg5xHVxyODfTOWf4+bFy3LBO3BuW/WHu/1O6j2vluLcfnj/K5CZ5TCzlEc9E4n3cw8f95HBdqmXM2y3kEM9OyjwRx0M8wzqk987N93ML8/L+POYQ+zmeaZXs4njIZ47lMzWrzrGd1pfct0tZLM0dca9f8pTJet14JvvWTNewuX/zGjfOIXmPH+tVea5u1enGTPLZST7bmsvhnN69v3IGz3rHdjo3xHoV61ScJ3J25vDtdOH7XMZK3m8M1/z9f2umOcpje91MzVmqPfldtQkAAAAAAAAAAAAAAAAAAAAAAACu+wCJRp2t
   </data>
  </layer>
  <objectgroup name="gameObjects">
-  <object id="5" gid="514" x="847" y="578" width="16" height="16"/>
-  <object id="6" gid="514" x="815" y="560" width="16" height="16"/>
-  <object id="7" gid="514" x="829.333" y="560" width="16" height="16"/>
-  <object id="8" gid="514" x="841.333" y="559.667" width="16" height="16"/>
-  <object id="9" gid="514" x="848" y="559.667" width="16" height="16"/>
-  <object id="10" gid="514" x="857.333" y="559" width="16" height="16"/>
-  <object id="11" gid="514" x="862.333" y="559" width="16" height="16"/>
-  <object id="12" gid="514" x="867" y="559" width="16" height="16"/>
-  <object id="13" gid="514" x="869.333" y="559" width="16" height="16"/>
-  <object id="14" gid="514" x="852.667" y="560" width="16" height="16"/>
-  <object id="15" gid="514" x="837.333" y="560" width="16" height="16"/>
-  <object id="16" gid="514" x="833.333" y="560.333" width="16" height="16"/>
-  <object id="17" gid="514" x="830" y="566" width="16" height="16"/>
-  <object id="18" gid="514" x="819.667" y="565.333" width="16" height="16"/>
-  <object id="19" gid="514" x="831" y="574.333" width="16" height="16"/>
-  <object id="20" gid="514" x="847" y="578.333" width="16" height="16"/>
-  <object id="21" gid="514" x="864.667" y="577.333" width="16" height="16"/>
-  <object id="22" gid="514" x="866.667" y="584" width="16" height="16"/>
-  <object id="23" gid="514" x="853.333" y="590" width="16" height="16"/>
-  <object id="24" gid="514" x="834.333" y="590.667" width="16" height="16"/>
-  <object id="25" gid="514" x="818.667" y="593.333" width="16" height="16"/>
-  <object id="26" gid="514" x="816.333" y="604" width="16" height="16"/>
-  <object id="27" gid="514" x="843" y="614.667" width="16" height="16"/>
-  <object id="28" gid="514" x="865.667" y="610" width="16" height="16"/>
-  <object id="29" gid="514" x="873" y="617" width="16" height="16"/>
-  <object id="30" gid="514" x="854" y="632.667" width="16" height="16"/>
-  <object id="31" gid="514" x="832.333" y="638" width="16" height="16"/>
-  <object id="32" gid="514" x="838.667" y="650.667" width="16" height="16"/>
-  <object id="33" gid="514" x="870" y="662" width="16" height="16"/>
-  <object id="34" gid="514" x="880.333" y="645" width="16" height="16"/>
-  <object id="35" gid="514" x="878.667" y="609.667" width="16" height="16"/>
-  <object id="36" gid="514" x="871.667" y="580" width="16" height="16"/>
-  <object id="37" gid="514" x="873.667" y="555.667" width="16" height="16"/>
-  <object id="38" gid="514" x="882" y="553.333" width="16" height="16"/>
-  <object id="39" gid="514" x="899" y="567" width="16" height="16"/>
-  <object id="40" gid="514" x="901" y="588.333" width="16" height="16"/>
-  <object id="41" gid="514" x="889.667" y="609.333" width="16" height="16"/>
-  <object id="42" gid="514" x="890.667" y="635" width="16" height="16"/>
-  <object id="43" gid="514" x="891.667" y="654" width="16" height="16"/>
-  <object id="44" gid="514" x="831" y="615.667" width="16" height="16"/>
-  <object id="45" gid="514" x="799.333" y="586.667" width="16" height="16"/>
-  <object id="46" gid="514" x="792" y="582.667" width="16" height="16"/>
-  <object id="47" gid="514" x="816.333" y="578.667" width="16" height="16"/>
-  <object id="48" gid="514" x="823.667" y="604.667" width="16" height="16"/>
-  <object id="49" gid="514" x="814.667" y="610.333" width="16" height="16"/>
-  <object id="50" gid="514" x="838.333" y="624.333" width="16" height="16"/>
-  <object id="51" gid="514" x="863" y="631.667" width="16" height="16"/>
-  <object id="52" gid="514" x="871.333" y="635.667" width="16" height="16"/>
+  <object id="55" x="915.667" y="476.25" width="7.33333" height="178.416">
+   <properties>
+    <property name="allowHorizontal" value="false"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer name="foreground" width="100" height="100">
   <data encoding="base64" compression="zlib">
