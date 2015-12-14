@@ -222,4 +222,19 @@
    <object id="0" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
+ <tile id="452">
+  <objectgroup draworder="index">
+   <object id="0" x="0" y="0" width="16" height="3"/>
+  </objectgroup>
+ </tile>
+ <tile id="453">
+  <objectgroup draworder="index">
+   <object id="0" x="0" y="0" width="16" height="3"/>
+  </objectgroup>
+ </tile>
+ <tile id="454">
+  <objectgroup draworder="index">
+   <object id="0" x="0" y="0" width="16" height="2.875"/>
+  </objectgroup>
+ </tile>
 </tileset>
