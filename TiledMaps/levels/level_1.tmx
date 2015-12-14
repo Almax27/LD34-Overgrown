@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" nextobjectid="54">
+ <tileset firstgid="1" source="sprite_earth.tsx"/>
+ <layer name="background" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt0bENg0AQRcFzaDrDdTmBznBVZoMVBEjY0SJuRvq6dHWvNQAAAAAAAAAAAAAAAAAqPQ82lF7Ut2XdtG7c7VV6Ud+ixb5JvHPpRX2LFmPbmsT7Kb3o3t4nyx65aDI8Sk69tfzvX2UPLa4hewAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/OsLoRcSbA==
+  </data>
+ </layer>
+ <layer name="midground" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
+  </data>
+ </layer>
+ <objectgroup name="backgroundObjects"/>
+ <layer name="game" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2FtuwjAQBVD7q+yLAgujhYWlHyyrRIrVyUAopFCEdI5kJSURUn3xY1wKAAAAAAAAAAAAAADwm2Ut5fMP7b0++z94Xef6ft2347PNse2ObR+u6+F+c+HzD3nMtq2nfbwZ2jpc4zsxq/Z5e7Y4ft+XPGZZDmOhZbAr436OubzV65os5otjo13b3JMbj9fn0TKQw3Mt07od8zDn/L9tPV2vZfE8XZXBq7mmLlT7PV7LYV1/9l5x/xtrRLXf48Qc4j645bAv4zWn/3tl3DxErA1bfZj7f5fu41451vb985VMZsljYiqPeCYS72MNH+vJ/mouu81yIod4dtLWiTge4hnWJr23L9aWuXJ9HnOI/RzPtFp2cTzkM8f2mTnrNts6nl9y305lMbV2xFq/5SmT63XDmeyhjPewuX/zHjeuIbnGj/NVe27euk03ZJLPTvLZ1rkc9undhTP4u9jW8doQ56s4T8V1ImdnDb+fLvye21jJ9UZ/zb//QxnnKI/7687MOVNzT37X3AQAAAAAAAAAAAAAAAAAAAAAAACXfQPYcZT1
+  </data>
+ </layer>
+ <objectgroup name="gameObjects">
+  <object id="5" gid="514" x="847" y="578" width="16" height="16"/>
+  <object id="6" gid="514" x="815" y="560" width="16" height="16"/>
+  <object id="7" gid="514" x="829.333" y="560" width="16" height="16"/>
+  <object id="8" gid="514" x="841.333" y="559.667" width="16" height="16"/>
+  <object id="9" gid="514" x="848" y="559.667" width="16" height="16"/>
+  <object id="10" gid="514" x="857.333" y="559" width="16" height="16"/>
+  <object id="11" gid="514" x="862.333" y="559" width="16" height="16"/>
+  <object id="12" gid="514" x="867" y="559" width="16" height="16"/>
+  <object id="13" gid="514" x="869.333" y="559" width="16" height="16"/>
+  <object id="14" gid="514" x="852.667" y="560" width="16" height="16"/>
+  <object id="15" gid="514" x="837.333" y="560" width="16" height="16"/>
+  <object id="16" gid="514" x="833.333" y="560.333" width="16" height="16"/>
+  <object id="17" gid="514" x="830" y="566" width="16" height="16"/>
+  <object id="18" gid="514" x="819.667" y="565.333" width="16" height="16"/>
+  <object id="19" gid="514" x="831" y="574.333" width="16" height="16"/>
+  <object id="20" gid="514" x="847" y="578.333" width="16" height="16"/>
+  <object id="21" gid="514" x="864.667" y="577.333" width="16" height="16"/>
+  <object id="22" gid="514" x="866.667" y="584" width="16" height="16"/>
+  <object id="23" gid="514" x="853.333" y="590" width="16" height="16"/>
+  <object id="24" gid="514" x="834.333" y="590.667" width="16" height="16"/>
+  <object id="25" gid="514" x="818.667" y="593.333" width="16" height="16"/>
+  <object id="26" gid="514" x="816.333" y="604" width="16" height="16"/>
+  <object id="27" gid="514" x="843" y="614.667" width="16" height="16"/>
+  <object id="28" gid="514" x="865.667" y="610" width="16" height="16"/>
+  <object id="29" gid="514" x="873" y="617" width="16" height="16"/>
+  <object id="30" gid="514" x="854" y="632.667" width="16" height="16"/>
+  <object id="31" gid="514" x="832.333" y="638" width="16" height="16"/>
+  <object id="32" gid="514" x="838.667" y="650.667" width="16" height="16"/>
+  <object id="33" gid="514" x="870" y="662" width="16" height="16"/>
+  <object id="34" gid="514" x="880.333" y="645" width="16" height="16"/>
+  <object id="35" gid="514" x="878.667" y="609.667" width="16" height="16"/>
+  <object id="36" gid="514" x="871.667" y="580" width="16" height="16"/>
+  <object id="37" gid="514" x="873.667" y="555.667" width="16" height="16"/>
+  <object id="38" gid="514" x="882" y="553.333" width="16" height="16"/>
+  <object id="39" gid="514" x="899" y="567" width="16" height="16"/>
+  <object id="40" gid="514" x="901" y="588.333" width="16" height="16"/>
+  <object id="41" gid="514" x="889.667" y="609.333" width="16" height="16"/>
+  <object id="42" gid="514" x="890.667" y="635" width="16" height="16"/>
+  <object id="43" gid="514" x="891.667" y="654" width="16" height="16"/>
+  <object id="44" gid="514" x="831" y="615.667" width="16" height="16"/>
+  <object id="45" gid="514" x="799.333" y="586.667" width="16" height="16"/>
+  <object id="46" gid="514" x="792" y="582.667" width="16" height="16"/>
+  <object id="47" gid="514" x="816.333" y="578.667" width="16" height="16"/>
+  <object id="48" gid="514" x="823.667" y="604.667" width="16" height="16"/>
+  <object id="49" gid="514" x="814.667" y="610.333" width="16" height="16"/>
+  <object id="50" gid="514" x="838.333" y="624.333" width="16" height="16"/>
+  <object id="51" gid="514" x="863" y="631.667" width="16" height="16"/>
+  <object id="52" gid="514" x="871.333" y="635.667" width="16" height="16"/>
+ </objectgroup>
+ <layer name="foreground" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1l1OwkAQAOBFExVuheiD3gqkD3or/6OncjZ000pqgyAlke9LJp2UbrKZ7dBJCQAAAAAAAAAAAAAAAIChjCMm9bXkDK/U/ibiNuKjlTO8Uvv7iIeI8ajJGV6pfe6LyWh1L+efh9vSUZhGrS9H3++9pqb249ZvOc9n8xb5+3Bb/PfaZzCP66LOc42X9TOl9uxf+wyyKq3e+d9a1murOn9P+mZXuZa7zLFda5ddD9IrfyPKu9w3x5b3vmqtafeAGXh36+9v3xyb/9ZO1uJ0w7Vsp2uOzd+T3A/TiLOI84jr+jpLTY/8NANXe9npceiapUpfPEVcRbxEPEZcRDynpkf65rBtZgS6lb7I57CIuIuYp+ZMZofb2lHKtS/nsMl9AAAAAAAAAAAAAAAAAAAAAAAAAAD+3hcOOTJb
+  </data>
+ </layer>
+</map>
