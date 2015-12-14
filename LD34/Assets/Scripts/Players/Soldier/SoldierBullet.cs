@@ -7,6 +7,7 @@ public class SoldierBullet : MonoBehaviour
     public int damage = 1;
     public Vector2 direction = new Vector2(0, 0);
     public float speed = 5;
+    public float maxDistance = 20;
 
     public LayerMask collisionMask;
 
@@ -16,6 +17,7 @@ public class SoldierBullet : MonoBehaviour
     SpriteRenderer sprite = null;
 
     Vector3 lastRayOrigin = new Vector3();
+    float distanceTraveled = 0;
 
     // Use this for initialization
     void Start()
@@ -23,12 +25,7 @@ public class SoldierBullet : MonoBehaviour
         rigidbody2D = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         lastRayOrigin = transform.position;
-    }
-	
-    // Update is called once per frame
-    void Update()
-    {
-        
+        distanceTraveled = 0;
     }
 
     void FixedUpdate()
@@ -51,10 +48,17 @@ public class SoldierBullet : MonoBehaviour
         lastRayOrigin = transform.position;
 
         Vector2 pos2D = transform.position;
-        rigidbody2D.MovePosition(pos2D + (direction.normalized * speed * Time.fixedDeltaTime));
+        var deltaPos = direction.normalized * speed * Time.fixedDeltaTime;
+        rigidbody2D.MovePosition(pos2D + deltaPos);
         if (sprite)
         {
             sprite.flipX = direction.x < 0;
+        }
+
+        distanceTraveled += deltaPos.magnitude;
+        if (distanceTraveled > maxDistance)
+        {
+            Destroy(gameObject);
         }
     }
 }
