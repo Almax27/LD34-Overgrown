@@ -187,6 +187,11 @@
    <object id="0" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
+ <tile id="329">
+  <objectgroup draworder="index">
+   <object id="0" x="0" y="0" width="16" height="3"/>
+  </objectgroup>
+ </tile>
  <tile id="386" terrain=",1,,1">
   <objectgroup draworder="index">
    <object id="0" x="0" y="0" width="16" height="16"/>
