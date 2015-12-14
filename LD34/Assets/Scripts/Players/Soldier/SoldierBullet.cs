@@ -28,18 +28,12 @@ public class SoldierBullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 pos2D = transform.position;
-        rigidbody2D.MovePosition(pos2D + (direction.normalized * speed * Time.smoothDeltaTime));
-        if (sprite)
-        {
-            sprite.flipX = direction.x < 0;
-        }
+        
     }
 
     void FixedUpdate()
     {
-        var direction = (transform.position - lastRayOrigin);
-        var hitInfo = Physics2D.Raycast(lastRayOrigin, direction.normalized, direction.magnitude, collisionMask);
+        var hitInfo = Physics2D.Raycast(transform.position, direction.normalized, speed * Time.fixedDeltaTime, collisionMask);
         if (hitInfo)
         {
             if (hitInfo.rigidbody)
@@ -55,6 +49,13 @@ public class SoldierBullet : MonoBehaviour
             Destroy(gameObject);
         }
         lastRayOrigin = transform.position;
+
+        Vector2 pos2D = transform.position;
+        rigidbody2D.MovePosition(pos2D + (direction.normalized * speed * Time.fixedDeltaTime));
+        if (sprite)
+        {
+            sprite.flipX = direction.x < 0;
+        }
     }
 }
 
