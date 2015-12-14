@@ -29,6 +29,8 @@ public class PlayerController : MonoBehaviour {
 
 	bool hasMovedInAir = false;
 
+    bool tryJump = true;
+    float xInputRaw = 0;
     float xInput = 0;
     float xInputVel = 0;
     Vector2 velocity = Vector2.zero;
@@ -42,18 +44,21 @@ public class PlayerController : MonoBehaviour {
 
     void Update()
     {
-        var isGrounded = grounder.isGrounded && velocity.y <= 0;
-
         //get input
-        float xInputRaw = Input.GetAxisRaw("Horizontal");
-        bool tryJump = Input.GetButtonDown("Jump");
+        xInputRaw = Input.GetAxisRaw("Horizontal");
+        tryJump = tryJump || Input.GetButtonDown("Jump");
+    }
+
+    void FixedUpdate()
+    {
+        var isGrounded = grounder.isGrounded && velocity.y <= 0;
 
         //apply gravity
         if (isGrounded)
         {
             velocity.y = 0;
         }
-        velocity.y -= gravity * Time.smoothDeltaTime;
+        velocity.y -= gravity * Time.fixedDeltaTime;
 
         //handle jumps
         if (isGrounded)
@@ -70,13 +75,14 @@ public class PlayerController : MonoBehaviour {
         if (hasJumped)
         {
             float lastJumpTick = jumpTick;
-            jumpTick += Time.smoothDeltaTime;
+            jumpTick += Time.fixedDeltaTime;
             float deltaY = (jumpCurve.Evaluate(jumpTick) - jumpCurve.Evaluate(lastJumpTick)) * jumpHeight;
             if(deltaY != 0)
             {
-                velocity.y = deltaY / Time.smoothDeltaTime;
+                velocity.y = deltaY / Time.fixedDeltaTime;
             }
         }
+        tryJump = false;
 
         //handle movement
         if (isGrounded)
@@ -125,11 +131,11 @@ public class PlayerController : MonoBehaviour {
 
         //update animator
         animator.SetFloat("moveSpeed", Mathf.Abs(xInput));
-        animator.SetBool("isRunning", xInputRaw != 0);
+        animator.SetBool("isRunning", canMove && xInputRaw != 0);
         animator.SetBool("isGrounded", isGrounded);
 
         //move rigidbody
-        Vector3 newPosition = transform.position + new Vector3(velocity.x, velocity.y, 0) * Time.smoothDeltaTime;
+        Vector3 newPosition = transform.position + new Vector3(velocity.x, velocity.y, 0) * Time.fixedDeltaTime;
         rigidbody2D.MovePosition(newPosition);
     }
 }
