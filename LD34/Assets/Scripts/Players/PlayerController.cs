@@ -29,7 +29,9 @@ public class PlayerController : MonoBehaviour {
 
 	bool hasMovedInAir = false;
 
-	Vector2 velocity = new Vector2(0,0);
+    float xInput = 0;
+    float xInputVel = 0;
+    Vector2 velocity = Vector2.zero;
 
 	void Start () 
 	{
@@ -43,7 +45,7 @@ public class PlayerController : MonoBehaviour {
         var isGrounded = grounder.isGrounded && velocity.y <= 0;
 
         //get input
-        float xInput = Input.GetAxis("Horizontal");
+        float xInputRaw = Input.GetAxisRaw("Horizontal");
         bool tryJump = Input.GetButtonDown("Jump");
 
         //apply gravity
@@ -83,6 +85,7 @@ public class PlayerController : MonoBehaviour {
         }
         if (canMove)
         {
+            xInput = Mathf.SmoothDamp(xInput, xInputRaw, ref xInputVel, 0.1f);
             float desiredSpeed = groundSpeed;
             //use air speed when changing direction in the air
             if (!isGrounded && (hasMovedInAir || Mathf.Sign(velocity.x) != Mathf.Sign(xInput)))
@@ -121,8 +124,8 @@ public class PlayerController : MonoBehaviour {
         }
 
         //update animator
-        animator.SetFloat("moveSpeed", xInput);
-        animator.SetBool("isRunning", xInput != 0);
+        animator.SetFloat("moveSpeed", Mathf.Abs(xInput));
+        animator.SetBool("isRunning", xInputRaw != 0);
         animator.SetBool("isGrounded", isGrounded);
 
         //move rigidbody
