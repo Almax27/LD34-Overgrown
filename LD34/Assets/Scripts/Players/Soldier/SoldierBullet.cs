@@ -35,7 +35,7 @@ public class SoldierBullet : MonoBehaviour
         {
             if (hitInfo.rigidbody)
             {
-                hitInfo.rigidbody.SendMessage("OnDamage", damage);
+                hitInfo.rigidbody.SendMessage("OnDamage", new Damage(damage, gameObject));
             }
             if (hitEffectPrefab)
             {

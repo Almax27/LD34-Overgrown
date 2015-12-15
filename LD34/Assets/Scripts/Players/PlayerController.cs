@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour {
 	public SpriteRenderer legs;
     public Grounder grounder;
     public Climber climber;
+    public Grounder climbGrounder;
 
     [Header("Config")]
 	public float gravity = 1;
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour {
     public LayerMask climbingLayer = new LayerMask();
     public bool allowMoveToCancelClimb = false;
     public float climbExitTime = 0.2f; //time after leaving climbable before can climb again
+    public float rootOnDamageTime = 0.2f;
 
     [Header("State")]
     public bool canMove = true;
@@ -44,6 +46,7 @@ public class PlayerController : MonoBehaviour {
     float yInput = 0;
 
     float lastClimbTime = 0;
+    float lastDamageTime = 0;
 
     Vector2 velocity = Vector2.zero;
 
@@ -65,6 +68,7 @@ public class PlayerController : MonoBehaviour {
     void FixedUpdate()
     {
         var isGrounded = grounder.isGrounded && velocity.y <= 0;
+        var isClimbGrounded = climbGrounder.isGrounded && velocity.y <= 0;
 
         //apply gravity
         if (isGrounded)
@@ -76,7 +80,7 @@ public class PlayerController : MonoBehaviour {
             velocity.y -= gravity * Time.fixedDeltaTime;
         }
 
-        HandleClimbing(isGrounded);
+        HandleClimbing(isGrounded, isClimbGrounded);
         HandleJumping(isGrounded);
         HandleMovement(isGrounded);
 
@@ -93,7 +97,7 @@ public class PlayerController : MonoBehaviour {
         rigidbody2D.MovePosition(newPosition);
     }
         
-    void HandleClimbing(bool isGrounded)
+    void HandleClimbing(bool isGrounded, bool isClimbingGrounded)
     {
         //handle climbing
         bool wasClimbing = isClimbing;
@@ -111,7 +115,7 @@ public class PlayerController : MonoBehaviour {
             isClimbing = false;
         }
         //handle botom of ladder case
-        else if (isGrounded && yInput < 0 && !climber.atTopOfLadder)
+        else if (isGrounded && isClimbingGrounded && yInput < 0 && !climber.atTopOfLadder)
         {
             isClimbing = false;
         }
@@ -169,12 +173,14 @@ public class PlayerController : MonoBehaviour {
 
     void HandleMovement(bool isGrounded)
     {
+        bool isRooted = Time.time - lastDamageTime < rootOnDamageTime;
+
         //handle movement
         if (isGrounded)
         {
             hasMovedInAir = false;
         }
-        if (canMove)
+        if (canMove && !isRooted)
         {
             xInput = Mathf.SmoothDamp(xInput, xInputRaw, ref xInputVel, 0.1f);
             float desiredSpeed = groundSpeed;
@@ -216,5 +222,16 @@ public class PlayerController : MonoBehaviour {
                 isLookingRight = isMovingRight;
             }
         }
+    }
+
+    void OnDamage(Damage damage)
+    {
+        lastDamageTime = Time.time;
+        //animator.SetTrigger("onDamage");
+    }
+
+    void OnDeath()
+    {
+        Destroy(gameObject);
     }
 }

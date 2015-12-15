@@ -8,16 +8,27 @@ public class GroundAIController : MonoBehaviour
 
     public LayerMask targetMask = new LayerMask();
     public LayerMask sightMask = new LayerMask();
+    public LayerMask attackMask = new LayerMask();
+    public LayerMask navigationMask = new LayerMask();
     public float aggroRange = 10;
-    public float speed = 10;
+    public float attackSpeed = 20;
     public float attackDistance = 1;
+    public int attackDamage = 0;
+    public float moveSpeed = 10;
+    public float minMoveActionTime = 1;
+    public float maxMoveActionTime = 3;
+    public Collider2D attackCollider;
+    public Collider2D floorTest = null;
+    public Collider2D wallTest = null;
 
     float targetingTick = 0;
+    float moveTick = 0;
+    float moveDuration = 0;
     Transform currentTarget;
 
     Vector2 velocity = new Vector2(0,0);
 
-    new Rigidbody2D rigidbody2d = null;
+    new Rigidbody2D rigidbody2D = null;
     Animator animator = null;
 
     bool isAttacking = false;
@@ -25,55 +36,78 @@ public class GroundAIController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        rigidbody2d = GetComponent<Rigidbody2D>();
+        rigidbody2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
 	
     // Update is called once per frame
     void FixedUpdate()
     {
-        targetingTick += Time.deltaTime;
+        targetingTick += Time.fixedDeltaTime;
         if (targetingTick > 0.5f)
         {
-            currentTarget = FindTarget();
+            var newTarget = FindTarget();
+            if (currentTarget != null && newTarget == null)
+            {
+                velocity.x = 0;
+            }
+            currentTarget = newTarget;
             targetingTick = 0;
         }
 
         if (currentTarget && !isAttacking)
         {
-            float distance = Mathf.Abs(this.transform.position.x - currentTarget.transform.position.x);
+            float distance = Vector3.Distance(transform.position, currentTarget.transform.position);
             if (distance < attackDistance)
             {
                 isAttacking = true;
             }
             else
             {
-                Mathf.SmoothDamp(this.transform.position.x, currentTarget.transform.position.x, ref velocity.x, 0.2f, speed);
+                Mathf.SmoothDamp(this.transform.position.x, currentTarget.transform.position.x, ref velocity.x, 0.2f, attackSpeed);
             }
         }
-        else
+        else if (isAttacking)
         {
             velocity.x = 0;
         }
-        var pos2D = new Vector2(transform.position.x, transform.position.y);
-        rigidbody2d.MovePosition(pos2D + (velocity * Time.fixedDeltaTime));
+        else
+        {
+            moveTick += Time.fixedDeltaTime;
+            if (Physics2D.OverlapArea(wallTest.bounds.min, wallTest.bounds.max, navigationMask) != null ||
+                Physics2D.OverlapArea(floorTest.bounds.min, floorTest.bounds.max, navigationMask) == null) //wallTest.IsTouchingLayers(navigationMask) || !floorTest.IsTouchingLayers(navigationMask))
+            {
+                velocity.x = -velocity.x;
+            }
+            if (moveTick > moveDuration)
+            {
+                velocity.x = Random.value > 0.5f ? 0 : moveSpeed;
+                velocity.x *= Random.value > 0.5f ? -1 : 1;
+                moveTick = 0;
+                moveDuration = Random.Range(minMoveActionTime, maxMoveActionTime);
+            }
+        }
 
         if (velocity.x != 0)
         {
             bool isMovingRight = velocity.x > 0;
-            body.flipX = isMovingRight;
+            transform.localScale = new Vector3(isMovingRight ? -1 : 1, 1, 1);
         }
 
+        var pos2D = new Vector2(transform.position.x, transform.position.y);
+        rigidbody2D.MovePosition(pos2D + (velocity * Time.fixedDeltaTime));
+
         animator.SetBool("isMoving", velocity.x != 0);
-        animator.SetFloat("moveSpeed", velocity.x / speed);
+        animator.SetFloat("moveSpeed", velocity.x / (isAttacking ? attackSpeed : moveSpeed));
         animator.SetBool("isAttacking", isAttacking);
     }
 
     Transform FindTarget()
     {
-        var potentialTargets = Physics2D.OverlapCircleAll(this.transform.position, aggroRange, targetMask);
+        var potentialTargets = GameObject.FindGameObjectsWithTag("Player");
+        //var potentialTargets = Physics2D.OverlapCircleAll(this.transform.position, aggroRange, targetMask);
 
-        float minDistanceSq = float.MaxValue;
+        float minDistanceSq = aggroRange*aggroRange;
         Transform closestTargetInSight = null;
         foreach (var target in potentialTargets)
         {
@@ -81,13 +115,8 @@ public class GroundAIController : MonoBehaviour
             float distSq = direction.sqrMagnitude;
             if (distSq < minDistanceSq)
             {
-                //test line of sight
-                var hitInfo = Physics2D.Raycast(this.transform.position, direction.normalized, aggroRange, sightMask);
-                if (hitInfo)
-                {
-                    closestTargetInSight = target.transform;
-                    minDistanceSq = distSq;
-                }
+                closestTargetInSight = target.transform;
+                minDistanceSq = distSq;
             }
         }
         return closestTargetInSight;
@@ -96,6 +125,11 @@ public class GroundAIController : MonoBehaviour
     void OnAttack()
     {
         Debug.Log("Attack!");
+        var hits = Physics2D.OverlapAreaAll(attackCollider.bounds.min, attackCollider.bounds.max, attackMask);
+        foreach (var hit in hits)
+        {
+            hit.SendMessage("OnDamage", new Damage(attackDamage, gameObject), SendMessageOptions.DontRequireReceiver);
+        }
     }
 
     void OnAttackFinished()
@@ -108,7 +142,12 @@ public class GroundAIController : MonoBehaviour
         this.enabled = false;
         animator.SetBool("isDead", true);
         gameObject.layer = 0;
-        rigidbody2d.isKinematic = true;
+        rigidbody2D.isKinematic = true;
+    }
+
+    void OnDamage(Damage damage)
+    {
+        currentTarget = damage.owner.transform;
     }
 
     void onDeathAnimFinished()
@@ -117,9 +156,16 @@ public class GroundAIController : MonoBehaviour
         if (deadPrefab)
         {
             var deadSprite = Instantiate(deadPrefab.gameObject).GetComponent<SpriteRenderer>();
-            deadSprite.flipX = body.flipX;
+            deadSprite.transform.localScale = transform.localScale;
             deadSprite.transform.position = this.transform.position;
         }
     }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(this.transform.position, aggroRange);
+    }
+
 }
 

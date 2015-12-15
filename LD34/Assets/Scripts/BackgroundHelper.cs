@@ -20,7 +20,10 @@ public class BackgroundHelper : MonoBehaviour {
     void Start()
     {
         var centerSprite = CreateSprite();
-        centerSprite.transform.position = Vector3.zero;
+        if (centerSprite)
+        {
+            centerSprite.transform.position = Vector3.zero;
+        }
 
         for (int i = -tileLeft; i < tileRight || i == 0; i++)
         {
@@ -29,17 +32,20 @@ public class BackgroundHelper : MonoBehaviour {
                 if (i != 0 || j != 0)
                 {
                     var sprite = CreateSprite();
-                    Vector3 pos = new Vector3(i * (sprite.bounds.size.x + tileSpacing.x), j * (sprite.bounds.size.y + tileSpacing.y), 0);
-                    pos.x += randomOffset.x * Random.value;
-                    pos.y += randomOffset.y * Random.value;
-                    sprite.transform.position = pos;
-                    if(randomFlipX)
+                    if (sprite)
                     {
-                        sprite.flipX = Random.value > 0.5f;
-                    }
-                    if(randomFlipY)
-                    {
-                        sprite.flipY = Random.value > 0.5f;
+                        Vector3 pos = new Vector3(i * (sprite.bounds.size.x + tileSpacing.x), j * (sprite.bounds.size.y + tileSpacing.y), 0);
+                        pos.x += randomOffset.x * Random.value;
+                        pos.y += randomOffset.y * Random.value;
+                        sprite.transform.position = pos;
+                        if (randomFlipX)
+                        {
+                            sprite.flipX = Random.value > 0.5f;
+                        }
+                        if (randomFlipY)
+                        {
+                            sprite.flipY = Random.value > 0.5f;
+                        }
                     }
                 }
             }
@@ -48,9 +54,13 @@ public class BackgroundHelper : MonoBehaviour {
 
     SpriteRenderer CreateSprite()
     {
-        var spriteRenderer = Instantiate(spritePrefab.gameObject).GetComponent<SpriteRenderer>();
-        spriteRenderer.transform.parent = this.transform;
-        return spriteRenderer;
+        if (spritePrefab)
+        {
+            var spriteRenderer = Instantiate(spritePrefab.gameObject).GetComponent<SpriteRenderer>();
+            spriteRenderer.transform.parent = this.transform;
+            return spriteRenderer;
+        }
+        return null;
     }
 
 	void LateUpdate () 
@@ -64,7 +74,7 @@ public class BackgroundHelper : MonoBehaviour {
         pos.x = camera.transform.position.x * parallaxScale.x;
         pos.y = camera.transform.position.y * parallaxScale.y;
 
-        pos.x += (relativePosition.x - 0.5f) * camera.orthographicSize * 2.0f;
+        pos.x += (relativePosition.x - 0.5f) * camera.orthographicSize * camera.aspect * 2.0f;
         pos.y += (relativePosition.y - 0.5f) * camera.orthographicSize * 2.0f;
 
         transform.position = pos;

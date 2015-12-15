@@ -9,7 +9,13 @@ public class Health : MonoBehaviour {
     public GameObject[] spawnOnDamage = new GameObject[0];
     public GameObject[] spawnOnDeath = new GameObject[0];
 
+    public Color damageTintColor = Color.red;
+    public float damageTintDuration = 0.2f;
+
     bool isDead = false;
+
+    float lastDamageTime = 0;
+    bool isDamageTinted = false;
 
     void Start()
     {
@@ -20,11 +26,12 @@ public class Health : MonoBehaviour {
     {
         currentHealth = maxHealth;
         isDead = false;
+        lastDamageTime = damageTintDuration;
     }
 
-    void OnDamage(int damage)
+    void OnDamage(Damage damage)
     {
-        currentHealth -= damage;
+        currentHealth -= damage.value;
 
         foreach (GameObject gobj in spawnOnDamage)
         {
@@ -37,6 +44,8 @@ public class Health : MonoBehaviour {
             isDead = true;
             SendMessage("OnDeath");
         }
+
+        lastDamageTime = Time.time;
     }
 
     void OnDeath()
@@ -44,6 +53,19 @@ public class Health : MonoBehaviour {
         foreach (GameObject gobj in spawnOnDeath)
         {
             Instantiate(gobj, this.transform.position, this.transform.rotation);
+        }
+    }
+
+    void Update()
+    {
+        bool doTint = Time.time - lastDamageTime < damageTintDuration;
+        if(doTint != isDamageTinted)
+        {
+            isDamageTinted = doTint;
+            foreach (var sprite in GetComponentsInChildren<SpriteRenderer>())
+            {
+                sprite.color = isDamageTinted ? damageTintColor : Color.white;
+            }
         }
     }
 }
