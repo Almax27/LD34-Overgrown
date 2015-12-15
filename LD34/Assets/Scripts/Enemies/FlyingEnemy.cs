@@ -61,4 +61,9 @@ public class FlyingEnemy : MonoBehaviour {
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, Vector2.Angle(Vector2.left, direction) * (direction.y > 0 ? -1 : 1)));
         }
 	}
+
+    void OnDeath()
+    {
+        Destroy(gameObject);
+    }
 }

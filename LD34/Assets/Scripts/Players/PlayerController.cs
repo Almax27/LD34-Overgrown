@@ -182,7 +182,7 @@ public class PlayerController : MonoBehaviour {
         }
         if (canMove && !isRooted)
         {
-            xInput = Mathf.SmoothDamp(xInput, xInputRaw, ref xInputVel, 0.1f);
+            xInput = Mathf.SmoothDamp(xInput, xInputRaw, ref xInputVel, 0.1f, float.MaxValue, Time.fixedTime);
             float desiredSpeed = groundSpeed;
             //use air speed when changing direction in the air
             if (!isGrounded && (hasMovedInAir || Mathf.Sign(velocity.x) != Mathf.Sign(xInput)))

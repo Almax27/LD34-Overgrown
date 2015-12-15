@@ -57,10 +57,12 @@ public class GroundAIController : MonoBehaviour
 
         if (currentTarget && !isAttacking)
         {
-            float distance = Vector3.Distance(transform.position, currentTarget.transform.position);
-            if (distance < attackDistance)
+            var direction = currentTarget.transform.position - transform.position;
+            if (direction.magnitude < attackDistance)
             {
                 isAttacking = true;
+                bool isTargetRight = direction.x > 0;
+                transform.localScale = new Vector3(isTargetRight ? -1 : 1, 1, 1);
             }
             else
             {
