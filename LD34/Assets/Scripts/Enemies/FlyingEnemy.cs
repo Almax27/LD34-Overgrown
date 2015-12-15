@@ -46,9 +46,10 @@ public class FlyingEnemy : MonoBehaviour {
 
             transform.position += direction * speed * Time.deltaTime;
 
+            attackTick += Time.deltaTime;
+
             if (targetDirection.sqrMagnitude < attackRange * attackRange)
             {
-                attackTick += Time.deltaTime;
                 if (attackTick > attackRate)
                 {
                     target.SendMessage("OnDamage", new Damage(damage, gameObject));
