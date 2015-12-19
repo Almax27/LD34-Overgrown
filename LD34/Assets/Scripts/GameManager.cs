@@ -55,6 +55,8 @@ public class GameManager : MonoBehaviour {
     public List<Enemy> flyingEnemies = new List<Enemy>();
     List<GameObject> activeEnemies = new List<GameObject>();
     List<GameObject> activeFlyingEnemies = new List<GameObject>();
+    public float optimiseEnemyDistance = 20;
+    float optimiseEnemyTick = 0;
 
 	// Use this for initialization
 	void Start () 
@@ -131,9 +133,7 @@ public class GameManager : MonoBehaviour {
             playerHealthText.text = "DEAD";
         }
 
-        //cleanup null enemies
-        activeEnemies.RemoveAll(v => v == null);
-        activeFlyingEnemies.RemoveAll(v => v == null);
+
 
         //spawn
         if (spawnTick > spawnRate)
@@ -163,6 +163,18 @@ public class GameManager : MonoBehaviour {
         else
         {
             spawnFlyingTick += Time.deltaTime;
+        }
+
+        optimiseEnemyTick += Time.deltaTime;
+        if (optimiseEnemyTick > 1.0f)
+        {
+            //cleanup null enemies
+            activeEnemies.RemoveAll(v => v == null);
+            activeFlyingEnemies.RemoveAll(v => v == null);
+            //optimise enemies
+            OptimiseEnemies(activeEnemies);
+            OptimiseEnemies(activeFlyingEnemies);
+            optimiseEnemyTick = 0;
         }
 	}
 
@@ -213,5 +225,27 @@ public class GameManager : MonoBehaviour {
         gobj.transform.parent = world;
 
         activeFlyingEnemies.Add(gobj);
+    }
+        
+    void OptimiseEnemies(List<GameObject> enemiesToOptimise)
+    {
+        if (activePlayerInstance)
+        {
+           float optimDistSq = optimiseEnemyDistance * optimiseEnemyDistance;
+            foreach (var enemy in enemiesToOptimise)
+            {
+                float distSq = (enemy.transform.position - activePlayerInstance.transform.position).sqrMagnitude;
+                enemy.SetActive(distSq < optimDistSq);
+            }
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        if(activePlayerInstance)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(activePlayerInstance.transform.position, optimiseEnemyDistance);
+        }
     }
 }

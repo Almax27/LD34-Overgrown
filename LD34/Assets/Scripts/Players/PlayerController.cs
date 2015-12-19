@@ -61,8 +61,12 @@ public class PlayerController : MonoBehaviour {
     {
         //get input
         xInputRaw = Input.GetAxisRaw("Horizontal");
+        xInput = Mathf.SmoothDamp(xInput, xInputRaw, ref xInputVel, 0.1f, float.MaxValue, Time.deltaTime);
         yInput = Input.GetAxis("Vertical");
         tryJump = tryJump || Input.GetButtonDown("Jump");
+
+        //update animator
+        animator.SetFloat("moveSpeed", Mathf.Abs(xInput));
     }
 
     void FixedUpdate()
@@ -87,7 +91,6 @@ public class PlayerController : MonoBehaviour {
         UpdateFacing();
 
         //update animator
-        animator.SetFloat("moveSpeed", Mathf.Abs(xInput));
         animator.SetBool("isRunning", canMove && xInputRaw != 0);
         animator.SetBool("isGrounded", isGrounded);
 
@@ -182,7 +185,6 @@ public class PlayerController : MonoBehaviour {
         }
         if (canMove && !isRooted)
         {
-            xInput = Mathf.SmoothDamp(xInput, xInputRaw, ref xInputVel, 0.1f, float.MaxValue, Time.fixedTime);
             float desiredSpeed = groundSpeed;
             //use air speed when changing direction in the air
             if (!isGrounded && (hasMovedInAir || Mathf.Sign(velocity.x) != Mathf.Sign(xInput)))

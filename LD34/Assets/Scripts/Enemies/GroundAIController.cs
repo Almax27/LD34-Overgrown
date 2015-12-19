@@ -76,8 +76,9 @@ public class GroundAIController : MonoBehaviour
         else
         {
             moveTick += Time.fixedDeltaTime;
-            if (Physics2D.OverlapArea(wallTest.bounds.min, wallTest.bounds.max, navigationMask) != null ||
-                Physics2D.OverlapArea(floorTest.bounds.min, floorTest.bounds.max, navigationMask) == null) //wallTest.IsTouchingLayers(navigationMask) || !floorTest.IsTouchingLayers(navigationMask))
+            if (//Physics2D.OverlapArea(wallTest.bounds.min, wallTest.bounds.max, navigationMask) != null ||
+                //Physics2D.OverlapArea(floorTest.bounds.min, floorTest.bounds.max, navigationMask) == null) 
+                wallTest.IsTouchingLayers(navigationMask) || !floorTest.IsTouchingLayers(navigationMask))
             {
                 velocity.x = -velocity.x;
             }
