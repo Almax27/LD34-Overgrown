@@ -12,6 +12,8 @@ public class SoldierBullet : MonoBehaviour
     public LayerMask collisionMask;
 
     public GameObject hitEffectPrefab;
+    public AudioSource spawnSoundPrefab;
+    public AudioSource destroySoundPrefab;
 
     new Rigidbody2D rigidbody2D = null;
     SpriteRenderer sprite = null;
@@ -26,6 +28,7 @@ public class SoldierBullet : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         lastRayOrigin = transform.position;
         distanceTraveled = 0;
+        SpawnSound(spawnSoundPrefab);
     }
 
     void FixedUpdate()
@@ -39,6 +42,7 @@ public class SoldierBullet : MonoBehaviour
             }
             else
             {
+                SpawnSound(destroySoundPrefab);
                 hitInfo.collider.SendMessage("OnDamage", new Damage(damage, gameObject), SendMessageOptions.DontRequireReceiver);
             }
             if (hitEffectPrefab)
@@ -63,6 +67,15 @@ public class SoldierBullet : MonoBehaviour
         if (distanceTraveled > maxDistance)
         {
             Destroy(gameObject);
+        }
+    }
+
+    void SpawnSound(AudioSource prefab)
+    {
+        if (prefab)
+        {
+            GameObject gobj = Instantiate(prefab.gameObject);
+            gobj.transform.position = transform.position;
         }
     }
 }

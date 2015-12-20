@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour {
     public bool allowMoveToCancelClimb = false;
     public float climbExitTime = 0.2f; //time after leaving climbable before can climb again
     public float rootOnDamageTime = 0.2f;
+    public GameObject[] spawnOnJump = new GameObject[0];
 
     [Header("State")]
     public bool canMove = true;
@@ -161,6 +162,7 @@ public class PlayerController : MonoBehaviour {
             jumpTick = 0;
             hasJumped = true;
             jumpsRemaining--;
+            OnJump();
         }
         if (hasJumped)
         {
@@ -204,8 +206,7 @@ public class PlayerController : MonoBehaviour {
 
     void UpdateFacing()
     {
-        //update sprites
-        if (xInput != 0)
+        if (Mathf.Abs(xInput) > 0.0001f)
         {
             isMovingRight = xInput > 0;
             if (canLook)
@@ -215,14 +216,16 @@ public class PlayerController : MonoBehaviour {
             body.flipX = !isLookingRight;
             legs.flipX = !isMovingRight;
         }
+    }
 
-        //update direction facing
-        if (xInput != 0)
+    void OnJump()
+    {
+        foreach (var prefab in spawnOnJump)
         {
-            bool isMovingRight = xInput > 0;
-            if (canLook)
+            if (prefab)
             {
-                isLookingRight = isMovingRight;
+                var gobj = Instantiate(prefab);
+                gobj.transform.position = transform.position;
             }
         }
     }

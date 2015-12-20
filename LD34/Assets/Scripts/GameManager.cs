@@ -176,6 +176,13 @@ public class GameManager : MonoBehaviour {
             OptimiseEnemies(activeFlyingEnemies);
             optimiseEnemyTick = 0;
         }
+
+        //mute button
+        if (Input.GetButtonDown("Mute"))
+        {
+            AudioListener audioListener = followCamera.GetComponent<AudioListener>();
+            audioListener.enabled = !audioListener.enabled;
+        }
 	}
 
     void SpawnCharacter(Character character)
