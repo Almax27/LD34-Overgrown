@@ -61,5 +61,10 @@ public class SoldierController : MonoBehaviour
         }
         bullet.damage = damage;
     }
+
+    void OnDeath()
+    {
+        this.enabled = false;
+    }
 }
 

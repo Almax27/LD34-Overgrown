@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour {
 	public float groundSpeed = 0.3f;
 	public float airSpeed = 0.1f;
     public float climbingSpeed = 0.2f;
-    public LayerMask climbingLayer = new LayerMask();
     public bool allowMoveToCancelClimb = false;
     public float climbExitTime = 0.2f; //time after leaving climbable before can climb again
     public float rootOnDamageTime = 0.2f;
@@ -67,6 +66,7 @@ public class PlayerController : MonoBehaviour {
 
         //update animator
         animator.SetFloat("moveSpeed", Mathf.Abs(xInput));
+        animator.SetFloat("climbSpeed", Mathf.Abs(yInput));
     }
 
     void FixedUpdate()
@@ -93,6 +93,7 @@ public class PlayerController : MonoBehaviour {
         //update animator
         animator.SetBool("isRunning", canMove && xInputRaw != 0);
         animator.SetBool("isGrounded", isGrounded);
+        animator.SetBool("isClimbing", isClimbing);
 
         //move rigidbody
         rigidbody2D.isKinematic = isClimbing;
@@ -233,6 +234,12 @@ public class PlayerController : MonoBehaviour {
     }
 
     void OnDeath()
+    {
+        animator.SetTrigger("onDeath");
+        this.enabled = false;
+    }
+
+    void OnDeathAnimFinished()
     {
         Destroy(gameObject);
     }
