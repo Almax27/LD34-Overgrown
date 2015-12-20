@@ -32,6 +32,7 @@ public class GroundAIController : MonoBehaviour
     Animator animator = null;
 
     bool isAttacking = false;
+    bool isClimbing = true;
 
     // Use this for initialization
     void Start()
@@ -55,18 +56,32 @@ public class GroundAIController : MonoBehaviour
             targetingTick = 0;
         }
 
+        velocity.y = 0;
+
         if (currentTarget && !isAttacking)
         {
             var direction = currentTarget.transform.position - transform.position;
             if (direction.magnitude < attackDistance)
             {
                 isAttacking = true;
+                isClimbing = false;
                 bool isTargetRight = direction.x > 0;
                 transform.localScale = new Vector3(isTargetRight ? -1 : 1, 1, 1);
             }
             else
             {
+                //calulcate climbing state
+                if ((wallTest.IsTouchingLayers(navigationMask) || isClimbing) && floorTest.IsTouchingLayers(navigationMask))
+                {
+                    isClimbing = true;
+                }
+                else
+                {
+                    isClimbing = false;
+                }
+
                 Mathf.SmoothDamp(this.transform.position.x, currentTarget.transform.position.x, ref velocity.x, 0.2f, attackSpeed);
+                velocity.y = isClimbing ? 30 : 0;
             }
         }
         else if (isAttacking)
