@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
     public class Enemy
     {
         public GameObject prefab;
+        public float spawnWeighting = 1;
     }
     #endregion
 
@@ -25,6 +26,10 @@ public class GameManager : MonoBehaviour {
     public int maxFlyingEnemies = 10;
     float spawnTick = 0;
     float spawnFlyingTick = 0;
+
+    [Header("Scoring")]
+    public int score = 0;
+
 
     [Header("World")]
     public AudioSource musicPrefab;
@@ -132,15 +137,13 @@ public class GameManager : MonoBehaviour {
         {
             playerHealthText.text = "DEAD";
         }
-
-
-
+            
         //spawn
         if (spawnTick > spawnRate)
         {
             if (activeEnemies.Count < maxEnemies)
             {
-                var enemy = enemies[Random.Range(0, enemies.Count)];
+                var enemy = PickRandomEnemy(enemies);
                 SpawnEnemy(enemy);
                 spawnTick = 0;
             }
@@ -155,7 +158,7 @@ public class GameManager : MonoBehaviour {
         {
             if (activeFlyingEnemies.Count < maxFlyingEnemies)
             {
-                var enemy = flyingEnemies[Random.Range(0, flyingEnemies.Count)];
+                var enemy = PickRandomEnemy(flyingEnemies);
                 SpawnFlyingEnemy(enemy);
                 spawnFlyingTick = 0;
             }
@@ -245,6 +248,31 @@ public class GameManager : MonoBehaviour {
                 enemy.SetActive(distSq < optimDistSq);
             }
         }
+    }
+
+    Enemy PickRandomEnemy(List<Enemy> enemiesToPickFrom)
+    {
+        float totalWeight = 0;
+        for (int i = 0; i < enemiesToPickFrom.Count; i++)
+        {
+            totalWeight += enemiesToPickFrom[i].spawnWeighting;
+        }
+
+        float chance = Random.value;
+
+        for(int i = 0; i < enemiesToPickFrom.Count; i++)
+        {
+            float spawnChance = enemiesToPickFrom[i].spawnWeighting / totalWeight;
+            if (chance <= spawnChance)
+            {
+                return enemiesToPickFrom[i];
+            }
+            else
+            {
+                chance -= spawnChance;
+            }
+        }
+        return null;
     }
 
     void OnDrawGizmos()
