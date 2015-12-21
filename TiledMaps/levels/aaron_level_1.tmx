@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="400" height="200" tilewidth="16" tileheight="16" nextobjectid="582">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="400" height="200" tilewidth="16" tileheight="16" nextobjectid="589">
  <tileset firstgid="1" name="sprite_earth" tilewidth="16" tileheight="16" tilecount="4096">
   <image source="sprite_earth.png" width="1024" height="1024"/>
   <terraintypes>
@@ -494,7 +494,7 @@
   <object id="273" name="enemy" x="2645.28" y="2383.45"/>
   <object id="274" name="enemy" x="2797.29" y="2356.54"/>
   <object id="275" name="enemy" x="2870.03" y="2245.25"/>
-  <object id="276" name="enemy" x="3087.5" y="2224.89"/>
+  <object id="276" name="enemy" x="3116.69" y="2242.64"/>
   <object id="277" name="enemy" x="3116.59" y="2368.9"/>
   <object id="278" name="enemy" x="3995.93" y="2323.08"/>
   <object id="279" name="enemy" x="4209.76" y="2306.35"/>
@@ -680,6 +680,12 @@
   <object id="79" name="climbable" x="868.636" y="204.606" width="6.60606" height="132"/>
   <object id="392" name="climbable" x="6035.69" y="1342.56" width="7.95352" height="287.719"/>
   <object id="450" name="climbable" x="5157.77" y="1900.27" width="4.54486" height="320.87"/>
+  <object id="583" x="2580.4" y="299.101" width="6.4687" height="66.8433"/>
+  <object id="584" x="2148.23" y="394.591" width="7.08477" height="114.897"/>
+  <object id="585" x="2084.77" y="234.414" width="5.85264" height="163.874"/>
+  <object id="586" x="2340.44" y="234.414" width="6.16067" height="68.6915"/>
+  <object id="587" x="2276.98" y="139.539" width="5.85264" height="97.9547"/>
+  <object id="588" x="2405.74" y="59.7585" width="4.92854" height="82.553"/>
  </objectgroup>
  <objectgroup name="playerSpawnPoints">
   <object id="108" name="player" x="2290.31" y="2223.69"/>
