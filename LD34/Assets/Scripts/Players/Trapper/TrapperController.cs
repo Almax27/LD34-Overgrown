@@ -60,6 +60,7 @@ public class TrapperController : MonoBehaviour
             bullet.direction = new Vector3(-1, 0, 0);
         }
         bullet.damage = damage;
+        bullet.owner = gameObject;
     }
 
     void OnDeath()

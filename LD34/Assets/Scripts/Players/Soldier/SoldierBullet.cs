@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class SoldierBullet : MonoBehaviour
 {
+    public GameObject owner = null;
     public int damage = 1;
     public Vector2 direction = new Vector2(0, 0);
     public float speed = 5;
     public float maxDistance = 20;
+    public int maxPenetrations = 0;
 
-    public LayerMask collisionMask;
+    public LayerMask collisionMask = new LayerMask();
+    public LayerMask damageableMask = new LayerMask();
 
     public GameObject hitEffectPrefab;
     public AudioSource spawnSoundPrefab;
@@ -20,6 +23,9 @@ public class SoldierBullet : MonoBehaviour
 
     Vector3 lastRayOrigin = new Vector3();
     float distanceTraveled = 0;
+
+    List<Collider2D> collidersPenetrated = new List<Collider2D>();
+    int penetrationsOccured = 0;
 
     // Use this for initialization
     void Start()
@@ -36,22 +42,34 @@ public class SoldierBullet : MonoBehaviour
         var hitInfo = Physics2D.Raycast(transform.position, direction.normalized, speed * Time.fixedDeltaTime, collisionMask);
         if (hitInfo)
         {
-            if (hitInfo.rigidbody)
+            if ((damageableMask.value & 1 << hitInfo.collider.gameObject.layer) != 0)
             {
-                hitInfo.rigidbody.SendMessage("OnDamage", new Damage(damage, gameObject), SendMessageOptions.DontRequireReceiver);
+                if (!collidersPenetrated.Contains(hitInfo.collider))
+                {
+                    collidersPenetrated.Add(hitInfo.collider);
+                    hitInfo.collider.SendMessageUpwards("OnDamage", new Damage(damage, owner), SendMessageOptions.DontRequireReceiver);
+                }
+
+
+                penetrationsOccured++;
+
+                if (penetrationsOccured > maxPenetrations)
+                {
+                    Destroy(gameObject);
+                }
             }
             else
             {
                 SpawnSound(destroySoundPrefab);
-                hitInfo.collider.SendMessage("OnDamage", new Damage(damage, gameObject), SendMessageOptions.DontRequireReceiver);
+                Destroy(gameObject);
             }
+
             if (hitEffectPrefab)
             {
                 var hitGobj = Instantiate(hitEffectPrefab);
                 hitGobj.transform.position = hitInfo.point;
                 hitGobj.transform.localScale = new Vector3(direction.x < 0 ? -1 : 1, 1, 1);
             }
-            Destroy(gameObject);
         }
         lastRayOrigin = transform.position;
 

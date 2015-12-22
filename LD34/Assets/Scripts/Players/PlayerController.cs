@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour {
 
 	bool hasMovedInAir = false;
 
-    bool tryJump = true;
+    bool tryJump = false;
     float xInputRaw = 0;
     float xInput = 0;
     float xInputVel = 0;
@@ -209,13 +209,13 @@ public class PlayerController : MonoBehaviour {
         if (Mathf.Abs(xInput) > 0.0001f)
         {
             isMovingRight = xInput > 0;
-            if (canLook)
-            {
-                isLookingRight = isMovingRight;
-            }
-            body.flipX = !isLookingRight;
-            legs.flipX = !isMovingRight;
         }
+        if (canLook && Mathf.Abs(xInputRaw) > 0.0001f)
+        {
+            isLookingRight = xInputRaw > 0;
+        }
+        body.flipX = !isLookingRight;
+        legs.flipX = !isMovingRight;
     }
 
     void OnJump()
@@ -240,10 +240,11 @@ public class PlayerController : MonoBehaviour {
     {
         animator.SetTrigger("onDeath");
         this.enabled = false;
+        FindObjectOfType<GameManager>().OnLoss("You Died.");
     }
 
     void OnDeathAnimFinished()
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 }

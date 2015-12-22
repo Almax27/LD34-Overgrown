@@ -24,7 +24,7 @@ public class GroundAIController : MonoBehaviour
     float targetingTick = 0;
     float moveTick = 0;
     float moveDuration = 0;
-    Transform currentTarget;
+    Health currentTarget;
 
     Vector2 velocity = new Vector2(0,0);
 
@@ -58,35 +58,38 @@ public class GroundAIController : MonoBehaviour
 
         velocity.y = 0;
 
-        if (currentTarget && !isAttacking)
+        if(currentTarget && currentTarget.currentHealth > 0)
         {
-            var direction = currentTarget.transform.position - transform.position;
-            if (direction.magnitude < attackDistance)
+            if (!isAttacking)
             {
-                isAttacking = true;
-                isClimbing = false;
-                bool isTargetRight = direction.x > 0;
-                transform.localScale = new Vector3(isTargetRight ? -1 : 1, 1, 1);
-            }
-            else
-            {
-                //calulcate climbing state
-                if ((wallTest.IsTouchingLayers(navigationMask) || isClimbing) && floorTest.IsTouchingLayers(navigationMask))
+                var direction = currentTarget.transform.position - transform.position;
+                if (direction.magnitude < attackDistance)
                 {
-                    isClimbing = true;
+                    isAttacking = true;
+                    isClimbing = false;
+                    bool isTargetRight = direction.x > 0;
+                    transform.localScale = new Vector3(isTargetRight ? -1 : 1, 1, 1);
                 }
                 else
                 {
-                    isClimbing = false;
-                }
+                    //calulcate climbing state
+                    if ((wallTest.IsTouchingLayers(navigationMask) || isClimbing) && floorTest.IsTouchingLayers(navigationMask))
+                    {
+                        isClimbing = true;
+                    }
+                    else
+                    {
+                        isClimbing = false;
+                    }
 
-                Mathf.SmoothDamp(this.transform.position.x, currentTarget.transform.position.x, ref velocity.x, 0.2f, attackSpeed);
-                velocity.y = isClimbing ? 30 : 0;
+                    Mathf.SmoothDamp(this.transform.position.x, currentTarget.transform.position.x, ref velocity.x, 0.2f, attackSpeed);
+                    velocity.y = isClimbing ? 30 : 0;
+                }
             }
-        }
-        else if (isAttacking)
-        {
-            velocity.x = 0;
+            else 
+            {
+                velocity.x = 0;
+            }
         }
         else
         {
@@ -120,20 +123,21 @@ public class GroundAIController : MonoBehaviour
         animator.SetBool("isAttacking", isAttacking);
     }
 
-    Transform FindTarget()
+    Health FindTarget()
     {
         var potentialTargets = GameObject.FindGameObjectsWithTag("Player");
         //var potentialTargets = Physics2D.OverlapCircleAll(this.transform.position, aggroRange, targetMask);
 
         float minDistanceSq = aggroRange*aggroRange;
-        Transform closestTargetInSight = null;
+        Health closestTargetInSight = null;
         foreach (var target in potentialTargets)
         {
+            var healthTarget = target.GetComponent<Health>();
             var direction = this.transform.position - target.transform.position;
             float distSq = direction.sqrMagnitude;
-            if (distSq < minDistanceSq)
+            if (healthTarget && distSq < minDistanceSq)
             {
-                closestTargetInSight = target.transform;
+                closestTargetInSight = healthTarget;
                 minDistanceSq = distSq;
             }
         }
@@ -165,7 +169,7 @@ public class GroundAIController : MonoBehaviour
 
     void OnDamage(Damage damage)
     {
-        currentTarget = damage.owner.transform;
+        currentTarget = damage.owner.GetComponent<Health>();
     }
 
     void onDeathAnimFinished()

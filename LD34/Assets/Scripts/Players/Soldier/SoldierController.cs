@@ -36,7 +36,7 @@ public class SoldierController : MonoBehaviour
 
         bool isPausedAfterShooting = playerController.grounder.isGrounded && Time.time - lastFireTime < pauseAfterShooting;
 
-        playerController.canLook = !isFiring && !isPausedAfterShooting;
+        playerController.canLook = !isFiring;
         playerController.canMove = canMoveAndShoot || (!isFiring && !isPausedAfterShooting);
 
         //update animator
@@ -60,6 +60,7 @@ public class SoldierController : MonoBehaviour
             bullet.direction = new Vector3(-1, 0, 0);
         }
         bullet.damage = damage;
+        bullet.owner = gameObject;
     }
 
     void OnDeath()

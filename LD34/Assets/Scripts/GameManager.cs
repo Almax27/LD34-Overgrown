@@ -20,15 +20,12 @@ public class GameManager : MonoBehaviour {
 
 
     [Header("Difficulty Config")]
-    public float spawnRate = 1;
     public int maxEnemies = 10;
-    public float flyingSpawnRate = 1;
     public int maxFlyingEnemies = 10;
-    float spawnTick = 0;
-    float spawnFlyingTick = 0;
 
     [Header("Scoring")]
     public int score = 0;
+    public int highScore = -1;
 
 
     [Header("World")]
@@ -37,8 +34,11 @@ public class GameManager : MonoBehaviour {
 
     public FollowCamera followCamera = null;
     public TextMesh playerHealthText = null;
+    public TextMesh scoreText = null;
+    public TextMesh highScoreText = null;
+    public ProgressManager progressManager = null;
+    public EndGame endGame = null;
 
-    public Transform title = null;
     public Transform world = null;
 
     public Transform playerSpawnPointsRoot = null;
@@ -63,9 +63,14 @@ public class GameManager : MonoBehaviour {
     public float optimiseEnemyDistance = 20;
     float optimiseEnemyTick = 0;
 
+    Animator animator = null;
+    bool gameEnded = false;
+
 	// Use this for initialization
 	void Start () 
     {
+        animator = GetComponent<Animator>();
+
         if (musicPrefab)
         {
             music = Instantiate(musicPrefab.gameObject).GetComponent<AudioSource>();
@@ -96,22 +101,46 @@ public class GameManager : MonoBehaviour {
             enemySpawnPoints.Add(col.transform);
         }
         Debug.Assert(enemySpawnPoints.Count > 0, "No enemy spawn points found!");
+
+        ResetToTitle();
 	}
 	
-    bool hadPlayer = true;
+    public void ResetToTitle()
+    {
+        if (score > 0 && score > highScore)
+        {
+            highScore = score;
+        }
+        highScoreText.text = highScore >= 0 ? string.Format("Highscore: {0}", highScore) : "";
+        score = 0;
+
+        progressManager.enabled = false;
+        progressManager.Reset();
+
+        foreach (var enemy in activeEnemies)
+        {
+            Destroy(enemy);
+        }
+        foreach (var enemy in activeFlyingEnemies)
+        {
+            Destroy(enemy);
+        }
+        foreach (var tempGobj in GameObject.FindGameObjectsWithTag("Temp"))
+        {
+            Destroy(tempGobj);
+        }
+        animator.SetTrigger("onTitle");
+        world.gameObject.SetActive(false);
+        if (activePlayerInstance)
+        {
+            Destroy(activePlayerInstance.gameObject);
+            activePlayerInstance = null;
+        }
+    }
 
 	// Update is called once per frame
 	void Update () 
     {
-        bool hasPlayer = activePlayerInstance != null;
-        if (hadPlayer != hasPlayer)
-        {
-            hadPlayer = hasPlayer;
-            title.gameObject.SetActive(!hasPlayer);
-            world.gameObject.SetActive(hasPlayer);
-            playerHealthText.transform.parent.gameObject.SetActive(hasPlayer);
-        }
-
         if (!activePlayerInstance)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1) && characters.Count > 0)
@@ -128,44 +157,51 @@ public class GameManager : MonoBehaviour {
             }
         }
 
+        //update UI
         if (activePlayerInstance)
         {
             Health playerHealth = activePlayerInstance.GetComponent<Health>();
-            playerHealthText.text = playerHealth ? playerHealth.currentHealth.ToString() : "No Health";
+            if (playerHealth)
+            {
+                playerHealthText.text = Mathf.Max(0, playerHealth.currentHealth).ToString();
+            }
+            else
+            {
+                playerHealthText.text = "No Health";
+            }
         }
         else
         {
-            playerHealthText.text = "DEAD";
+            playerHealthText.text = "???";
+        }
+
+        if (scoreText)
+        {
+            scoreText.text = string.Format("Score: {0}", score);
+        }
+
+        float enemyMultiplier = 1;
+        if (progressManager)
+        {
+            var progressStage = progressManager.GetCurrentStage();
+            if (progressStage != null)
+            {
+                enemyMultiplier = progressStage.enemyMultiplier;
+            }
         }
             
         //spawn
-        if (spawnTick > spawnRate)
+        if (activeEnemies.Count < maxEnemies*enemyMultiplier)
         {
-            if (activeEnemies.Count < maxEnemies)
-            {
-                var enemy = PickRandomEnemy(enemies);
-                SpawnEnemy(enemy);
-                spawnTick = 0;
-            }
-        }
-        else
-        {
-            spawnTick += Time.deltaTime;
+            var enemy = PickRandomEnemy(enemies);
+            SpawnEnemy(enemy);
         }
 
         //spawn flying
-        if (spawnFlyingTick > flyingSpawnRate)
+        if (activeFlyingEnemies.Count < maxFlyingEnemies*enemyMultiplier)
         {
-            if (activeFlyingEnemies.Count < maxFlyingEnemies)
-            {
-                var enemy = PickRandomEnemy(flyingEnemies);
-                SpawnFlyingEnemy(enemy);
-                spawnFlyingTick = 0;
-            }
-        }
-        else
-        {
-            spawnFlyingTick += Time.deltaTime;
+            var enemy = PickRandomEnemy(flyingEnemies);
+            SpawnFlyingEnemy(enemy);
         }
 
         optimiseEnemyTick += Time.deltaTime;
@@ -176,7 +212,7 @@ public class GameManager : MonoBehaviour {
             activeFlyingEnemies.RemoveAll(v => v == null);
             //optimise enemies
             OptimiseEnemies(activeEnemies);
-            OptimiseEnemies(activeFlyingEnemies);
+            //OptimiseEnemies(activeFlyingEnemies); //don't optimise flying enemies or they can't fly to the player
             optimiseEnemyTick = 0;
         }
 
@@ -185,6 +221,14 @@ public class GameManager : MonoBehaviour {
         {
             AudioListener audioListener = followCamera.GetComponent<AudioListener>();
             audioListener.enabled = !audioListener.enabled;
+        }
+        if (Input.GetButtonDown("PixelScaleToggle"))
+        {
+            var pixelScaleHelper = followCamera.GetComponent<PixelCameraHelper>();
+            if (pixelScaleHelper)
+            {
+                pixelScaleHelper.pixelScale = pixelScaleHelper.pixelScale == 1 ? 2 : 1;
+            }
         }
 	}
 
@@ -201,6 +245,11 @@ public class GameManager : MonoBehaviour {
         activePlayerInstance.transform.position = spawnPoint.transform.position;
 
         followCamera.target = activePlayerInstance.transform;
+
+        animator.SetTrigger("onGameStart");
+        world.gameObject.SetActive(true);
+
+        progressManager.enabled = true;
     }
 
     void SpawnEnemy(Enemy enemy)
@@ -218,20 +267,23 @@ public class GameManager : MonoBehaviour {
     {
         var gobj = Instantiate(enemy.prefab.gameObject);
 
-        //spawn edge of level
-        var pos = Vector3.zero;
-        if (Random.value > 0.5f)
+        Rect worldRect = new Rect(-200, -100, 400, 200);
+        //spawn distance away from player
+        if (activePlayerInstance)
         {
-            pos.x = Random.value > 0.5f ? -0.5f : 0.5f;
-            pos.y = Random.value;
+            var offset = Random.onUnitSphere * 100;
+            offset.z = 0;
+            var pos = activePlayerInstance.transform.position + offset;
+            pos.x = Mathf.Clamp(pos.x, worldRect.xMin, worldRect.xMax); 
+            pos.y = Mathf.Clamp(pos.y, worldRect.yMin, worldRect.yMax);
+            gobj.transform.position = pos;
         }
         else
         {
-            pos.x = Random.value;
-            pos.y = Random.value > 0.5f ? -0.5f : 0.5f;
+            var pos = new Vector3(Random.Range(worldRect.xMin, worldRect.xMax), Random.Range(worldRect.yMin, worldRect.yMax), 0);
+            gobj.transform.position = pos;
         }
-        pos.Scale(new Vector3(400, 200, 0));
-        gobj.transform.position = pos;
+
         gobj.transform.parent = world;
 
         activeFlyingEnemies.Add(gobj);
@@ -273,6 +325,22 @@ public class GameManager : MonoBehaviour {
             }
         }
         return null;
+    }
+
+    public void OnWin(string message)
+    {
+        endGame.OnGameEnded(score, highScore, message);
+        animator.SetTrigger("onGameEnd");
+        progressManager.enabled = false;
+        //destroy health so player is no longer targeted
+        Destroy(activePlayerInstance.GetComponent<Health>());
+    }
+
+    public void OnLoss(string message)
+    {
+        endGame.OnGameEnded(score, highScore, message);
+        animator.SetTrigger("onGameEnd");
+        progressManager.enabled = false;
     }
 
     void OnDrawGizmos()
